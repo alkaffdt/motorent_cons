@@ -37,9 +37,9 @@ dependencies:
   intl: ^0.20.2  
   supabase: ^2.10.0
   supabase_auth_ui: ^0.5.5
-  flutter_riverpod: ^3.0.3
+  flutter_riverpod: ^2.6.0 
   firebase_core: ^4.2.1
-firebase_remote_config: ^6.1.2
+  firebase_remote_config: ^6.1.2
   
 
 dev_dependencies:

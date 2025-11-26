@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:motorent_cons/extensions/context_extension.dart';
+import 'package:motorent_cons/extensions/double_extension.dart';
 import 'package:motorent_cons/extensions/int_extensions.dart';
 import 'package:motorent_cons/extensions/text_style_extension.dart';
 import 'package:motorent_cons/features/home/domain/entities/vehicle_model.dart';
+import 'package:motorent_cons/features/home/presentation/providers/selected_vehicle_provider.dart';
 import 'package:motorent_cons/features/home/presentation/widgets/prices_widget.dart';
 import 'package:motorent_cons/themes/app_colors.dart';
 
@@ -26,11 +29,26 @@ class _BikeSelectionScreenState extends ConsumerState<BikeSelectionScreen> {
   int _index = 0;
 
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      _onVehicleSelected(widget.vehicles[_index]);
+    });
+  }
+
+  void _onVehicleSelected(Vehicle vehicle) {
+    ref.read(selectedVehicleProvider.notifier).state = vehicle;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final topPadding = context.heightInPercent(15);
+
     return Column(
       children: [
-        Flexible(
-          fit: FlexFit.tight,
+        topPadding.toHeightGap(),
+        SizedBox(
+          height: 400,
           child: Container(
             color: Colors.amber,
             child: PageView.builder(
@@ -71,7 +89,7 @@ class _BikeSelectionScreenState extends ConsumerState<BikeSelectionScreen> {
             ),
           ),
         ),
-        24.toHeightGap(),
+        16.toHeightGap(),
         PricesWidget(widget.vehicles[_index]),
       ],
     );

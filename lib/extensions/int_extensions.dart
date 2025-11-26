@@ -93,13 +93,4 @@ extension IntExtensions on int {
     final age = now.year - birthDate.year;
     return age.toString();
   }
-
-  String toPriceFormat({String separator = ','}) {
-    String numberString = toString();
-    String formattedNumber = numberString.replaceAllMapped(
-      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-      (Match m) => '${m.group(1)}$separator',
-    );
-    return formattedNumber;
-  }
 }
