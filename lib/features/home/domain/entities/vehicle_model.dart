@@ -2,11 +2,12 @@ class Vehicle {
   final int id;
   final String name;
   final String description;
+  final String shortDesc;
   final int rangePerCharge;
   final int maxSpeed;
-  final int dailyPrice;
-  final int weeklyPrice;
-  final int monthlyPrice;
+  final double dailyPrice;
+  final double weeklyPrice;
+  final double monthlyPrice;
   final int weight;
   final double batteryCapacity;
   final List<String> images;
@@ -15,6 +16,7 @@ class Vehicle {
     required this.id,
     required this.name,
     required this.description,
+    required this.shortDesc,
     required this.rangePerCharge,
     required this.maxSpeed,
     required this.dailyPrice,
@@ -30,11 +32,12 @@ class Vehicle {
       id: json['id'],
       name: json['name'],
       description: json['description'],
+      shortDesc: json['short_desc'],
       rangePerCharge: json['range_per_charge'],
       maxSpeed: json['max_speed'],
-      dailyPrice: json['daily_price'],
-      weeklyPrice: json['weekly_price'],
-      monthlyPrice: json['monthly_price'],
+      dailyPrice: (json['daily_price'] as num).toDouble(),
+      weeklyPrice: (json['weekly_price'] as num).toDouble(),
+      monthlyPrice: (json['monthly_price'] as num).toDouble(),
       weight: json['weight'],
       batteryCapacity: json['battery_capacity'],
       images: List<String>.from(json['images']),
