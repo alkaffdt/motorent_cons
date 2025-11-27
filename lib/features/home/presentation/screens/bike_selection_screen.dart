@@ -54,7 +54,11 @@ class _BikeSelectionScreenState extends ConsumerState<BikeSelectionScreen> {
             child: PageView.builder(
               controller: _controller,
               itemCount: widget.vehicles.length,
-              onPageChanged: (index) => setState(() => _index = index),
+              onPageChanged: (index) {
+                setState(() => _index = index);
+
+                _onVehicleSelected(widget.vehicles[index]);
+              },
               itemBuilder: (context, index) {
                 final vehicle = widget.vehicles[index];
                 return AnimatedPadding(

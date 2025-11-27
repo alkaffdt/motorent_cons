@@ -67,13 +67,8 @@ class PricesWidget extends ConsumerWidget {
 
         return InkWell(
           onTap: () {
-            ref
-                .read(selectedRentalDetailProvider.notifier)
-                .state = RentalDetail(
-              vehicleId: vehicleId,
-              periodType: label.toLowerCase(),
-              price: price,
-            );
+            ref.read(selectedRentalDetailProvider.notifier).state =
+                RentalDetail(periodType: label.toLowerCase(), price: price);
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -20,7 +20,6 @@ class PurchaseButton extends ConsumerWidget {
         curve: Curves.easeOut,
         offset: isVisible ? Offset(0, 0) : Offset(0, 1.0),
 
-        // 0 = posisi normal, 1.0 = turun ke bawah layar
         child: AnimatedOpacity(
           duration: const Duration(milliseconds: 250),
           opacity: isVisible ? 1 : 0,
