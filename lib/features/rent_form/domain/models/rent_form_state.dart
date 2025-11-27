@@ -1,23 +1,19 @@
 class RentFormState {
   final String address;
-  final String startTime;
-  final String endTime;
+  final DateTime? startDateTime;
+  final DateTime? endDateTime;
 
-  RentFormState({
-    required this.address,
-    required this.startTime,
-    required this.endTime,
-  });
+  RentFormState({this.address = "", this.startDateTime, this.endDateTime});
 
   RentFormState copyWith({
     String? address,
-    String? startTime,
-    String? endTime,
+    DateTime? startDateTime,
+    DateTime? endDateTime,
   }) {
     return RentFormState(
       address: address ?? this.address,
-      startTime: startTime ?? this.startTime,
-      endTime: endTime ?? this.endTime,
+      startDateTime: startDateTime ?? this.startDateTime,
+      endDateTime: endDateTime ?? this.endDateTime,
     );
   }
 }
