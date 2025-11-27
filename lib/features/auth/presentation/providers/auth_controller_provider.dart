@@ -3,18 +3,16 @@ import 'package:motorent_cons/features/auth/domain/repositories/auth_repository.
 
 class AuthController extends StateNotifier<AsyncValue<bool>> {
   final AuthRepository repo;
-
   AuthController(this.repo) : super(const AsyncValue.data(false));
 
-  Future<AuthResult> loginOrSignup(String email, String password) async {
+  Future<AuthResult> loginOrSignup(
+    String email,
+    String password, {
+    String? name,
+  }) async {
     state = const AsyncValue.loading();
-    final result = await repo.loginOrSignup(email, password);
+    final result = await repo.loginOrSignup(email, password, name: name);
     state = AsyncValue.data(result.success);
     return result;
-  }
-
-  Future<void> signOut() async {
-    await repo.signOut();
-    state = const AsyncValue.data(false);
   }
 }

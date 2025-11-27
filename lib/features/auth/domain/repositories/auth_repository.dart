@@ -1,11 +1,12 @@
 abstract class AuthRepository {
-  Future<void> signInWithEmail(String email, String password);
-  Future<void> signUpWithEmail(String email, String password);
+  Future<AuthResult> loginOrSignup(
+    String email,
+    String password, {
+    String? name,
+  });
   Future<void> signOut();
   Stream<bool> authStateChanges();
   bool isLoggedIn();
-  //
-  Future<AuthResult> loginOrSignup(String email, String password);
 }
 
 class AuthResult {

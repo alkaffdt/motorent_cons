@@ -20,9 +20,11 @@ class LoginDialog extends ConsumerStatefulWidget {
 class _LoginDialogState extends ConsumerState<LoginDialog> {
   final emailCtrl = TextEditingController();
   final passCtrl = TextEditingController();
-  String? inlineError;
+  final nameCtrl = TextEditingController();
 
+  String? inlineError;
   bool loading = false;
+  bool requireName = false;
 
   @override
   Widget build(BuildContext context) {
@@ -30,57 +32,84 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       child: Padding(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              "Welcome 👋",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-
-            const SizedBox(height: 8),
-            const Text(
-              "Sign in or sign up instantly",
-              style: TextStyle(color: Colors.grey),
-            ),
-
-            const SizedBox(height: 20),
-
-            if (inlineError != null)
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.red.shade50,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  inlineError!,
-                  style: TextStyle(color: Colors.red.shade800),
-                ),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 340),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Welcome 👋",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
 
-            TextField(
-              controller: emailCtrl,
-              decoration: const InputDecoration(labelText: "Email"),
-            ),
-            const SizedBox(height: 10),
+              const SizedBox(height: 6),
+              Text(
+                requireName
+                    ? "Create your new account"
+                    : "Sign in or sign up instantly",
+                style: const TextStyle(color: Colors.grey),
+              ),
 
-            TextField(
-              controller: passCtrl,
-              decoration: const InputDecoration(labelText: "Password"),
-              obscureText: true,
-            ),
+              const SizedBox(height: 16),
 
-            const SizedBox(height: 20),
+              if (inlineError != null)
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.red.shade50,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    inlineError!,
+                    style: TextStyle(color: Colors.red.shade800),
+                  ),
+                ),
 
-            ElevatedButton(
-              onPressed: loading ? null : _submit,
-              child: loading
-                  ? const CircularProgressIndicator()
-                  : const Text("Continue"),
-            ),
-          ],
+              /// Email
+              TextField(
+                controller: emailCtrl,
+                decoration: const InputDecoration(labelText: "Email"),
+              ),
+              const SizedBox(height: 10),
+
+              /// Name (only visible if required)
+              if (requireName)
+                Column(
+                  children: [
+                    TextField(
+                      controller: nameCtrl,
+                      decoration: const InputDecoration(labelText: "Full Name"),
+                    ),
+                    const SizedBox(height: 10),
+                  ],
+                ),
+
+              /// Password
+              TextField(
+                controller: passCtrl,
+                decoration: const InputDecoration(labelText: "Password"),
+                obscureText: true,
+              ),
+
+              const SizedBox(height: 20),
+
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: loading ? null : _submit,
+                  child: loading
+                      ? const SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : Text(requireName ? "Create Account" : "Continue"),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -97,6 +126,7 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
     final result = await controller.loginOrSignup(
       emailCtrl.text.trim(),
       passCtrl.text.trim(),
+      name: requireName ? nameCtrl.text.trim() : null,
     );
 
     setState(() => loading = false);
@@ -107,7 +137,10 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
     }
 
     if (result.isNewUser) {
-      setState(() => inlineError = result.message);
+      setState(() {
+        requireName = true;
+        inlineError = result.message;
+      });
       return;
     }
 

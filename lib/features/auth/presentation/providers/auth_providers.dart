@@ -12,7 +12,7 @@ final supabaseClientProvider = Provider<SupabaseClient>((ref) {
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final client = ref.watch(supabaseClientProvider);
-  return SupabaseAuthRepositoryImpl(client);
+  return AuthRepositoryImpl(client);
 });
 
 final authControllerProvider =

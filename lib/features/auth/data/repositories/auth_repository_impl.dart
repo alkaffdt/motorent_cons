@@ -1,70 +1,64 @@
 import 'package:motorent_cons/features/auth/domain/repositories/auth_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class SupabaseAuthRepositoryImpl implements AuthRepository {
+class AuthRepositoryImpl implements AuthRepository {
   final SupabaseClient client;
 
-  SupabaseAuthRepositoryImpl(this.client);
+  AuthRepositoryImpl(this.client);
 
   @override
-  Future<void> signInWithEmail(String email, String password) async {
-    await client.auth.signInWithPassword(email: email, password: password);
-  }
-
-  @override
-  Future<void> signUpWithEmail(String email, String password) async {
-    await client.auth.signUp(email: email, password: password);
-  }
-
-  @override
-  Stream<bool> authStateChanges() {
-    return client.auth.onAuthStateChange.map((event) {
-      return event.session?.user != null;
-    });
-  }
-
-  @override
-  bool isLoggedIn() {
-    return client.auth.currentUser != null;
-  }
-
-  @override
-  Future<void> signOut() async {
-    await client.auth.signOut();
-  }
-
-  @override
-  Future<AuthResult> loginOrSignup(String email, String password) async {
+  Future<AuthResult> loginOrSignup(
+    String email,
+    String password, {
+    String? name,
+  }) async {
     try {
-      await signInWithEmail(email, password);
-
-      return AuthResult(
-        success: true,
-        isNewUser: false,
-        message: "Login successful",
+      // Try login first
+      final loginRes = await client.auth.signInWithPassword(
+        email: email,
+        password: password,
       );
-    } on AuthException catch (e) {
-      // User not found → auto signup
-      if (e.message.contains("Invalid login credentials")) {
-        try {
-          await signUpWithEmail(email, password);
 
-          return AuthResult(
-            success: true,
-            isNewUser: true,
-            message:
-                "Account created. Please check your email to verify your account.",
-          );
-        } catch (e) {
+      return AuthResult(success: true, isNewUser: false);
+    } catch (e) {
+      // If login fails → try signup
+      try {
+        if (name == null || name.isEmpty) {
           return AuthResult(
             success: false,
             isNewUser: true,
-            message: e.toString(),
+            message: "Please enter your name to create your account.",
           );
         }
-      }
 
-      return AuthResult(success: false, isNewUser: false, message: e.message);
+        await client.auth.signUp(
+          email: email,
+          password: password,
+          data: {"name": name},
+        );
+
+        return AuthResult(
+          success: true,
+          isNewUser: true,
+          message: "We’ve created your account! Please verify your email.",
+        );
+      } catch (e2) {
+        return AuthResult(
+          success: false,
+          isNewUser: false,
+          message: e2.toString(),
+        );
+      }
     }
   }
+
+  @override
+  Future<void> signOut() => client.auth.signOut();
+
+  @override
+  Stream<bool> authStateChanges() =>
+      client.auth.onAuthStateChange.map((event) => event.session != null);
+
+  @override
+  bool isLoggedIn() => client.auth.currentSession != null;
 }
