@@ -132,7 +132,7 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
     setState(() => loading = false);
 
     if (result.success && !result.isNewUser) {
-      Navigator.of(context).pop(); // login success
+      Navigator.of(context).pop();
       return;
     }
 

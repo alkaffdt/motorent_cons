@@ -19,7 +19,11 @@ class VehiclesRepoImpl implements VehiclesRepo {
 
   @override
   Future<List<Vehicle>> getVehicles() async {
-    final response = await supabaseClient.from('vehicles').select('*');
-    return response.map((e) => Vehicle.fromJSON(e)).toList();
+    try {
+      final response = await supabaseClient.from('vehicles').select('*');
+      return response.map((e) => Vehicle.fromJSON(e)).toList();
+    } catch (e) {
+      throw Exception("Failed to fetch vehicles: $e");
+    }
   }
 }

@@ -7,6 +7,15 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this.client);
 
   @override
+  User getCurrentUser() {
+    try {
+      return client.auth.currentUser!;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
   Future<AuthResult> loginOrSignup(
     String email,
     String password, {
@@ -34,7 +43,8 @@ class AuthRepositoryImpl implements AuthRepository {
         await client.auth.signUp(
           email: email,
           password: password,
-          data: {"name": name},
+
+          data: {"display_name": name},
         );
 
         return AuthResult(

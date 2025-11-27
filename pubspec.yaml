@@ -42,6 +42,7 @@ dependencies:
   firebase_remote_config: ^6.1.2
   google_sign_in: ^6.3.0
   dartz: ^0.10.1
+  webview_flutter: ^4.13.0
   
 
 dev_dependencies:

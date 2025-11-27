@@ -1,3 +1,5 @@
+import 'package:supabase_auth_ui/supabase_auth_ui.dart';
+
 abstract class AuthRepository {
   Future<AuthResult> loginOrSignup(
     String email,
@@ -7,6 +9,7 @@ abstract class AuthRepository {
   Future<void> signOut();
   Stream<bool> authStateChanges();
   bool isLoggedIn();
+  User getCurrentUser();
 }
 
 class AuthResult {

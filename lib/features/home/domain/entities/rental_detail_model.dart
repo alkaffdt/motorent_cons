@@ -1,6 +1,6 @@
 class RentalDetail {
-  final String periodType;
+  final int durationInDays;
   final double price;
 
-  RentalDetail({required this.periodType, required this.price});
+  RentalDetail({required this.durationInDays, required this.price});
 }

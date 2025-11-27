@@ -24,3 +24,7 @@ final authControllerProvider =
 final authStateProvider = StreamProvider<bool>((ref) {
   return ref.watch(authRepositoryProvider).authStateChanges();
 });
+
+final authUserProfileProvider = Provider<User>((ref) {
+  return ref.watch(authRepositoryProvider).getCurrentUser();
+});

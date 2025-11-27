@@ -20,17 +20,11 @@ class PricesWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Row(
       children: [
+        Expanded(child: _timeType(vehicle.id, 1, vehicle.dailyPrice)),
         Expanded(
           child: _timeType(
             vehicle.id,
-            RentPeriodTypes.daily.capitalizeWords(),
-            vehicle.dailyPrice,
-          ),
-        ),
-        Expanded(
-          child: _timeType(
-            vehicle.id,
-            RentPeriodTypes.weekly.capitalizeWords(),
+            7,
             vehicle.weeklyPrice,
             discount: DiscountCalculator.getWeeklyDiscount(
               dailyPrice: vehicle.dailyPrice,
@@ -41,7 +35,7 @@ class PricesWidget extends ConsumerWidget {
         Expanded(
           child: _timeType(
             vehicle.id,
-            RentPeriodTypes.monthly.capitalizeWords(),
+            30,
             vehicle.monthlyPrice,
             discount: DiscountCalculator.getMonthlyDiscount(
               dailyPrice: vehicle.dailyPrice,
@@ -55,27 +49,29 @@ class PricesWidget extends ConsumerWidget {
 
   Widget _timeType(
     int vehicleId,
-    String label,
+    int durationInDays,
     double price, {
     double discount = 0,
   }) {
     return Consumer(
       builder: (context, ref, child) {
         final isSelected =
-            ref.watch(selectedRentalDetailProvider)?.periodType ==
-            label.toLowerCase();
+            ref.watch(selectedRentalDetailProvider)?.durationInDays ==
+            durationInDays;
 
         return InkWell(
           onTap: () {
             ref.read(selectedRentalDetailProvider.notifier).state =
-                RentalDetail(periodType: label.toLowerCase(), price: price);
+                RentalDetail(durationInDays: durationInDays, price: price);
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 8),
-                child: Text(label).fontSize(14),
+                child: Text(
+                  '$durationInDays day${durationInDays > 1 ? 's' : ''}',
+                ).fontSize(14),
               ),
               Stack(
                 children: [

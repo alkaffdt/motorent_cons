@@ -11,6 +11,7 @@ class Vehicle {
   final int weight;
   final double batteryCapacity;
   final List<String> images;
+  final String productDetailUrl;
 
   Vehicle({
     required this.id,
@@ -25,6 +26,7 @@ class Vehicle {
     required this.weight,
     required this.batteryCapacity,
     required this.images,
+    required this.productDetailUrl,
   });
 
   factory Vehicle.fromJSON(Map<String, dynamic> json) {
@@ -41,6 +43,7 @@ class Vehicle {
       weight: json['weight'],
       batteryCapacity: json['battery_capacity'],
       images: List<String>.from(json['images']),
+      productDetailUrl: json['product_detail_url'],
     );
   }
 }

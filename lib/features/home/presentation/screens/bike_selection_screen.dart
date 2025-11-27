@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:motorent_cons/common/widgets/inapp_webview_page.dart';
 import 'package:motorent_cons/extensions/context_extension.dart';
 import 'package:motorent_cons/extensions/double_extension.dart';
 import 'package:motorent_cons/extensions/int_extensions.dart';
+import 'package:motorent_cons/extensions/navigation_extension.dart';
 import 'package:motorent_cons/extensions/text_style_extension.dart';
 import 'package:motorent_cons/features/home/domain/entities/vehicle_model.dart';
 import 'package:motorent_cons/features/home/presentation/providers/selected_vehicle_provider.dart';
@@ -81,14 +83,24 @@ class _BikeSelectionScreenState extends ConsumerState<BikeSelectionScreen> {
                         vehicle.shortDesc,
                       ).mediumSize().textColor(AppColors.textSecondary),
                       16.toHeightGap(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'See details',
-                          ).mediumSize().textColor(AppColors.textSecondary),
-                          Icon(Icons.keyboard_arrow_down_sharp),
-                        ],
+                      InkWell(
+                        onTap: () {
+                          context.push(
+                            InAppWebViewPage(
+                              initialUrl: vehicle.productDetailUrl,
+                              title: vehicle.name,
+                            ),
+                          );
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'See details',
+                            ).mediumSize().textColor(AppColors.textSecondary),
+                            Icon(Icons.keyboard_arrow_down_sharp),
+                          ],
+                        ),
                       ),
                     ],
                   ),

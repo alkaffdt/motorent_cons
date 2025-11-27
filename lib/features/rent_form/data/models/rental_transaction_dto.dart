@@ -1,20 +1,22 @@
+import 'package:dartz/dartz.dart';
+
 class RentalTransactionData {
-  final int id;
-  final DateTime createdAt;
+  final StringMonoid? id;
+  final DateTime? createdAt;
   final String? userId; // nullable di Supabase
   final DateTime? startDate;
   final DateTime? endDate;
-  final String? periodType;
+  final String? durationInDays;
   final double? totalPrice;
   final String? addressDetail;
 
   const RentalTransactionData({
-    required this.id,
-    required this.createdAt,
+    this.id,
+    this.createdAt,
     this.userId,
     this.startDate,
     this.endDate,
-    this.periodType,
+    this.durationInDays,
     this.totalPrice,
     this.addressDetail,
   });
@@ -22,7 +24,7 @@ class RentalTransactionData {
   // ---- FROM JSON ----
   factory RentalTransactionData.fromJson(Map<String, dynamic> json) {
     return RentalTransactionData(
-      id: json['id'] as int,
+      id: json['id'],
       createdAt: DateTime.parse(json['created_at']),
       userId: json['user_id'] as String?,
       startDate: json['start_date'] != null
@@ -31,45 +33,39 @@ class RentalTransactionData {
       endDate: json['end_date'] != null
           ? DateTime.parse(json['end_date'])
           : null,
-      periodType: json['period_type'] as String?,
+      durationInDays: json['duration_in_days'] as String?,
       totalPrice: (json['total_price'] as num?)?.toDouble(),
       addressDetail:
-          json['adress_detail'] as String?, // typo di DB tetap dipakai
+          json['address_detail'] as String?, // typo di DB tetap dipakai
     );
   }
 
   // ---- TO JSON ----
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'created_at': createdAt.toIso8601String(),
       'user_id': userId,
       'start_date': startDate?.toIso8601String(),
       'end_date': endDate?.toIso8601String(),
-      'period_type': periodType,
+      'duration_in_days': durationInDays,
       'total_price': totalPrice,
-      'adress_detail': addressDetail, // sesuai DB
+      'address_detail': addressDetail, // sesuai DB
     };
   }
 
   // ---- COPYWITH ----
   RentalTransactionData copyWith({
-    int? id,
-    DateTime? createdAt,
     String? userId,
     DateTime? startDate,
     DateTime? endDate,
-    String? periodType,
+    String? durationInDays,
     double? totalPrice,
     String? addressDetail,
   }) {
     return RentalTransactionData(
-      id: id ?? this.id,
-      createdAt: createdAt ?? this.createdAt,
       userId: userId ?? this.userId,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
-      periodType: periodType ?? this.periodType,
+      durationInDays: durationInDays ?? this.durationInDays,
       totalPrice: totalPrice ?? this.totalPrice,
       addressDetail: addressDetail ?? this.addressDetail,
     );
