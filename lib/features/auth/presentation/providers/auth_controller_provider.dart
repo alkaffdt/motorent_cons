@@ -15,4 +15,10 @@ class AuthController extends StateNotifier<AsyncValue<bool>> {
     state = AsyncValue.data(result.success);
     return result;
   }
+
+  Future<void> signOut() async {
+    state = const AsyncValue.loading();
+    await repo.signOut();
+    state = const AsyncValue.data(false);
+  }
 }
