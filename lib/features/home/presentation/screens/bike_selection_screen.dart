@@ -8,23 +8,38 @@ import 'package:motorent_cons/extensions/int_extensions.dart';
 import 'package:motorent_cons/extensions/navigation_extension.dart';
 import 'package:motorent_cons/extensions/text_style_extension.dart';
 import 'package:motorent_cons/features/home/domain/entities/vehicle_model.dart';
+import 'package:motorent_cons/features/home/presentation/providers/get_all_vehicles_provider.dart';
 import 'package:motorent_cons/features/home/presentation/providers/selected_vehicle_provider.dart';
 import 'package:motorent_cons/features/home/presentation/widgets/prices_widget.dart';
 import 'package:motorent_cons/themes/app_colors.dart';
 
-class BikeSelectionScreen extends ConsumerStatefulWidget {
-  const BikeSelectionScreen(this.vehicles, {super.key});
+class BikeSelectionScreen extends ConsumerWidget {
+  const BikeSelectionScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(getAllVehiclesProvider);
+
+    return state.when(
+      data: (data) => _BikeSelectionBody(data),
+      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+      error: (error, stackTrace) => Center(child: Text(error.toString())),
+    );
+  }
+}
+
+class _BikeSelectionBody extends ConsumerStatefulWidget {
+  const _BikeSelectionBody(this.vehicles, {super.key});
 
   final List<Vehicle> vehicles;
 
   @override
-  ConsumerState<BikeSelectionScreen> createState() =>
-      _BikeSelectionScreenState();
+  ConsumerState<_BikeSelectionBody> createState() => _BikeSelectionBodyState();
 }
 
-class _BikeSelectionScreenState extends ConsumerState<BikeSelectionScreen> {
+class _BikeSelectionBodyState extends ConsumerState<_BikeSelectionBody> {
   final PageController _controller = PageController(
-    viewportFraction: 0.8,
+    viewportFraction: 0.65,
     initialPage: 1,
   );
 
@@ -46,12 +61,10 @@ class _BikeSelectionScreenState extends ConsumerState<BikeSelectionScreen> {
   Widget build(BuildContext context) {
     final topPadding = context.heightInPercent(10);
 
-    return ListView(
+    return Column(
       children: [
-        topPadding.toHeightGap(),
-        100.toHeightGap(),
         SizedBox(
-          height: 400,
+          height: 324,
           child: Container(
             color: Colors.amber,
             child: PageView.builder(
@@ -64,6 +77,8 @@ class _BikeSelectionScreenState extends ConsumerState<BikeSelectionScreen> {
               },
               itemBuilder: (context, index) {
                 final vehicle = widget.vehicles[index];
+                final imageHeight = 175.0;
+
                 return AnimatedPadding(
                   padding: EdgeInsets.all(_index == index ? 0.0 : 16.0),
                   curve: Curves.fastOutSlowIn,
@@ -74,15 +89,18 @@ class _BikeSelectionScreenState extends ConsumerState<BikeSelectionScreen> {
                     children: [
                       Hero(
                         tag: "vehicle-${vehicle.id}",
-                        child: Image.network(vehicle.images.first),
+                        child: Image.network(
+                          vehicle.images.first,
+                          height: imageHeight,
+                        ),
                       ),
-                      24.toHeightGap(),
+                      16.toHeightGap(),
                       Text(vehicle.name).headerExtraSize(),
                       4.toHeightGap(),
                       Text(
                         vehicle.shortDesc,
                       ).mediumSize().textColor(AppColors.textSecondary),
-                      16.toHeightGap(),
+                      8.toHeightGap(),
                       InkWell(
                         onTap: () {
                           context.push(

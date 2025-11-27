@@ -3,16 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:motorent_cons/extensions/navigation_extension.dart';
 import 'package:motorent_cons/features/auth/presentation/widgets/login_dialog.dart';
 import 'package:motorent_cons/features/auth/presentation/providers/auth_providers.dart';
+import 'package:motorent_cons/features/home/presentation/providers/selected_rental_period_provider.dart';
+import 'package:motorent_cons/features/home/presentation/providers/selected_vehicle_provider.dart';
 import 'package:motorent_cons/features/rent_form/presentation/screens/rent_form_page.dart';
-import 'package:motorent_cons/themes/app_colors.dart';
 
 class PurchaseButton extends ConsumerWidget {
-  final bool isVisible;
-
-  const PurchaseButton({super.key, required this.isVisible});
+  const PurchaseButton({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isVisible = ref.watch(selectedRentalDetailProvider) != null;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: AnimatedSlide(
@@ -30,17 +31,17 @@ class PurchaseButton extends ConsumerWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  final loggedIn = ref
+                  final isLoggedIn = ref
                       .read(authRepositoryProvider)
                       .isLoggedIn();
 
-                  if (!loggedIn) {
+                  if (!isLoggedIn) {
                     LoginDialog.show(context);
                   } else {
                     context.pushWithSlowTransition(RentFormPage());
                   }
                 },
-                child: const Text("Let's rent"),
+                child: const Text("Let's Rent!"),
               ),
             ),
           ),
