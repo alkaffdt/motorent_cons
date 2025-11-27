@@ -1,135 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:motorent_cons/common/widgets/date_time_picker.dart';
+import 'package:motorent_cons/extensions/int_extensions.dart';
 import 'package:motorent_cons/features/rent_form/presentation/providers/rent_form_controller.dart';
+import 'package:motorent_cons/features/rent_form/presentation/widgets/confirm_rent_button.dart';
 
 class RentFormPage extends ConsumerWidget {
   const RentFormPage({super.key});
 
-  Future<DateTime?> _pickDateTime(BuildContext context) async {
-    final date = await showDatePicker(
-      context: context,
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2100),
-      initialDate: DateTime.now(),
-    );
-
-    if (date == null) return null;
-
-    final time = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-
-    if (time == null) return null;
-
-    return DateTime(date.year, date.month, date.day, time.hour, time.minute);
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(rentFormProvider);
-    final notifier = ref.read(rentFormProvider.notifier);
+    final formNotifier = ref.read(rentFormProvider.notifier);
+    final formState = ref.watch(rentFormProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text("Rent Form")),
       body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.all(16),
+        child: Stack(
           children: [
-            // Address Field
-            TextField(
-              decoration: const InputDecoration(
-                labelText: "Address",
-                border: OutlineInputBorder(),
-              ),
-              onChanged: notifier.setAddress,
+            ListView(
+              children: [
+                // ADDRESS
+                TextField(
+                  decoration: InputDecoration(
+                    labelText: "Address",
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: formNotifier.setAddress,
+                ),
+                16.toHeightGap(),
+
+                // START DATE
+                MotorentDateTimePicker(
+                  label: "Start Date & Time",
+                  value: formState.startDateTime,
+                  error: null,
+                  onPick: () =>
+                      _pickDateTime(context, formNotifier.setStartDateTime),
+                ),
+                16.toHeightGap(),
+
+                // END DATE
+                if (formState.endDateTime != null)
+                  MotorentDateTimePicker(
+                    label: "End Date & Time",
+                    value: formState.endDateTime,
+                    error: null,
+                    enabled: false,
+                  ),
+                24.toHeightGap(),
+
+                // SUBMIT BUTTON
+              ],
             ),
-
-            const SizedBox(height: 20),
-
-            // Start DateTime Picker
-            InkWell(
-              onTap: () async {
-                final result = await _pickDateTime(context);
-                if (result != null) notifier.setStartDateTime(result);
-              },
-              child: Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey.shade300),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.schedule),
-                    const SizedBox(width: 10),
-                    Text(
-                      state.startDateTime == null
-                          ? "Select Start Time"
-                          : state.startDateTime.toString(),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            // End DateTime Picker
-            InkWell(
-              onTap: () async {
-                final result = await _pickDateTime(context);
-                if (result != null) notifier.setEndDateTime(result);
-              },
-              child: Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey.shade300),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.schedule_outlined),
-                    const SizedBox(width: 10),
-                    Text(
-                      state.endDateTime == null
-                          ? "Select End Time"
-                          : state.endDateTime.toString(),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            const Spacer(),
-
-            // Submit Button
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton(
-                onPressed: () {
-                  if (state.address.isEmpty ||
-                      state.startDateTime == null ||
-                      state.endDateTime == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Please fill all fields.")),
-                    );
-                    return;
-                  }
-
-                  // TODO: connect with Supabase insert()
-
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Rental submitted!")),
-                  );
-                },
-                child: const Text("Submit"),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: ConfirmRentButton(
+                enabled: formNotifier.validate(),
+                onPressed: () {},
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _pickDateTime(
+    BuildContext context,
+    void Function(DateTime) onPicked,
+  ) async {
+    final date = await showDatePicker(
+      context: context,
+      firstDate: DateTime.now().subtract(const Duration(days: 1)),
+      lastDate: DateTime(2100),
+      initialDate: DateTime.now(),
+    );
+
+    if (date == null) return;
+
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+    if (time == null) return;
+
+    final finalDateTime = DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    );
+
+    onPicked(finalDateTime);
   }
 }
