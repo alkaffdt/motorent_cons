@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:motorent_cons/extensions/int_extensions.dart';
 import '../providers/auth_providers.dart';
 
 class LoginDialog extends ConsumerStatefulWidget {
@@ -25,6 +26,7 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
   String? inlineError;
   bool loading = false;
   bool requireName = false;
+  bool emailWasSent = false;
 
   @override
   Widget build(BuildContext context) {
@@ -67,33 +69,49 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
                   ),
                 ),
 
+              16.toHeightGap(),
+
               /// Email
-              TextField(
-                controller: emailCtrl,
-                decoration: const InputDecoration(labelText: "Email"),
-              ),
-              const SizedBox(height: 10),
+              if (!requireName) ...[
+                TextField(
+                  autofocus: true,
+                  controller: emailCtrl,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: "Email",
+                  ),
+                ),
+                16.toHeightGap(),
+              ],
+
+              /// Password
+              if (!requireName) ...[
+                TextField(
+                  controller: passCtrl,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: "Password",
+                  ),
+                  obscureText: true,
+                ),
+                16.toHeightGap(),
+              ],
 
               /// Name (only visible if required)
               if (requireName)
                 Column(
                   children: [
                     TextField(
+                      autofocus: true,
                       controller: nameCtrl,
-                      decoration: const InputDecoration(labelText: "Full Name"),
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: "Full Name",
+                      ),
                     ),
                     const SizedBox(height: 10),
                   ],
                 ),
-
-              /// Password
-              TextField(
-                controller: passCtrl,
-                decoration: const InputDecoration(labelText: "Password"),
-                obscureText: true,
-              ),
-
-              const SizedBox(height: 20),
 
               SizedBox(
                 width: double.infinity,
@@ -105,7 +123,13 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
                           height: 22,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                      : Text(requireName ? "Create Account" : "Continue"),
+                      : Text(
+                          emailWasSent
+                              ? "Already Verified The Email"
+                              : requireName
+                              ? "Create Account"
+                              : "Continue",
+                        ),
                 ),
               ),
             ],
@@ -131,6 +155,7 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
 
     setState(() => loading = false);
 
+    // Existing users
     if (result.success && !result.isNewUser) {
       Navigator.of(context).pop();
       return;
@@ -139,6 +164,7 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
     if (result.isNewUser) {
       setState(() {
         requireName = true;
+        emailWasSent = result.isNewUser && result.success;
         inlineError = result.message;
       });
       return;

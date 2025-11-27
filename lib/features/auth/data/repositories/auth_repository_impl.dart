@@ -50,7 +50,7 @@ class AuthRepositoryImpl implements AuthRepository {
         return AuthResult(
           success: true,
           isNewUser: true,
-          message: "We’ve created your account! Please verify your email.",
+          message: "We’ve created your account! \nPlease verify your email.",
         );
       } catch (e2) {
         return AuthResult(
