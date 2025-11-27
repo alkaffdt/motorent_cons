@@ -21,7 +21,20 @@ extension NavigatorExt on BuildContext {
     this,
   ).pushReplacementNamed<T, TO>(screenName, arguments: arguments);
 
-  @Deprecated('Use pushNamed instead')
+  Future<dynamic> pushWithSlowTransition(
+    Widget screen, {
+    RouteSettings? settings,
+    bool maintainState = true,
+    bool fullscreenDialog = false,
+  }) async => await Navigator.push(
+    this,
+    PageRouteBuilder(
+      transitionDuration: const Duration(milliseconds: 800),
+      reverseTransitionDuration: const Duration(milliseconds: 400),
+      pageBuilder: (_, __, ___) => screen,
+    ),
+  );
+
   Future<dynamic> push(
     Widget screen, {
     RouteSettings? settings,
@@ -36,7 +49,6 @@ extension NavigatorExt on BuildContext {
     ),
   );
 
-  @Deprecated('Use pushReplacement instead')
   Future<dynamic> pushReplacement(
     Widget screen, {
     RouteSettings? settings,

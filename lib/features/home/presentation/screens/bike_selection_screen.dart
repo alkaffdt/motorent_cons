@@ -26,7 +26,7 @@ class _BikeSelectionScreenState extends ConsumerState<BikeSelectionScreen> {
     initialPage: 1,
   );
 
-  int _index = 0;
+  int _index = 1;
 
   @override
   void initState() {
@@ -42,11 +42,12 @@ class _BikeSelectionScreenState extends ConsumerState<BikeSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final topPadding = context.heightInPercent(15);
+    final topPadding = context.heightInPercent(10);
 
-    return Column(
+    return ListView(
       children: [
         topPadding.toHeightGap(),
+        100.toHeightGap(),
         SizedBox(
           height: 400,
           child: Container(
@@ -69,7 +70,10 @@ class _BikeSelectionScreenState extends ConsumerState<BikeSelectionScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Image.network(vehicle.images.first),
+                      Hero(
+                        tag: "vehicle-${vehicle.id}",
+                        child: Image.network(vehicle.images.first),
+                      ),
                       24.toHeightGap(),
                       Text(vehicle.name).headerExtraSize(),
                       4.toHeightGap(),
@@ -95,6 +99,7 @@ class _BikeSelectionScreenState extends ConsumerState<BikeSelectionScreen> {
         ),
         16.toHeightGap(),
         PricesWidget(widget.vehicles[_index]),
+        200.toHeightGap(),
       ],
     );
   }

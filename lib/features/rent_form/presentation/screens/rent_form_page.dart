@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:motorent_cons/common/widgets/date_time_picker.dart';
 import 'package:motorent_cons/extensions/int_extensions.dart';
+import 'package:motorent_cons/features/home/presentation/providers/selected_vehicle_provider.dart';
 import 'package:motorent_cons/features/rent_form/presentation/providers/rent_form_controller.dart';
 import 'package:motorent_cons/features/rent_form/presentation/widgets/confirm_rent_button.dart';
 
@@ -12,6 +13,8 @@ class RentFormPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final formNotifier = ref.read(rentFormProvider.notifier);
     final formState = ref.watch(rentFormProvider);
+    //
+    final selectedVehicle = ref.watch(selectedVehicleProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text("Rent Form")),
@@ -21,15 +24,11 @@ class RentFormPage extends ConsumerWidget {
           children: [
             ListView(
               children: [
-                // ADDRESS
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: "Address",
-                    border: OutlineInputBorder(),
-                  ),
-                  onChanged: formNotifier.setAddress,
+                // VEHICLE
+                Hero(
+                  tag: "vehicle-${selectedVehicle!.id}",
+                  child: Image.network(selectedVehicle.images.first),
                 ),
-                16.toHeightGap(),
 
                 // START DATE
                 MotorentDateTimePicker(
@@ -51,7 +50,15 @@ class RentFormPage extends ConsumerWidget {
                   ),
                 24.toHeightGap(),
 
-                // SUBMIT BUTTON
+                // ADDRESS
+                TextField(
+                  decoration: InputDecoration(
+                    labelText: "Address",
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: formNotifier.setAddress,
+                ),
+                16.toHeightGap(),
               ],
             ),
             Align(

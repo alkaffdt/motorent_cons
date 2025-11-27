@@ -37,7 +37,7 @@ class PurchaseButton extends ConsumerWidget {
                   if (!loggedIn) {
                     LoginDialog.show(context);
                   } else {
-                    context.push(RentFormPage());
+                    context.pushWithSlowTransition(RentFormPage());
                   }
                 },
                 child: const Text("Let's rent"),
