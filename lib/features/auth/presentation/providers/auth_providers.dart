@@ -20,3 +20,7 @@ final authControllerProvider =
       final repo = ref.watch(authRepositoryProvider);
       return AuthController(repo);
     });
+
+final authStateProvider = StreamProvider<bool>((ref) {
+  return ref.watch(authRepositoryProvider).authStateChanges();
+});

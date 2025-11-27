@@ -17,20 +17,20 @@ class SupabaseAuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> signOut() async {
-    await client.auth.signOut();
-  }
-
-  @override
   Stream<bool> authStateChanges() {
-    return client.auth.onAuthStateChange.map(
-      (event) => client.auth.currentUser != null,
-    );
+    return client.auth.onAuthStateChange.map((event) {
+      return event.session?.user != null;
+    });
   }
 
   @override
   bool isLoggedIn() {
     return client.auth.currentUser != null;
+  }
+
+  @override
+  Future<void> signOut() async {
+    await client.auth.signOut();
   }
 
   @override

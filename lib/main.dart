@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:motorent_cons/core/app_router.dart';
 import 'package:motorent_cons/features/home/presentation/screens/home_page.dart';
 import 'package:motorent_cons/themes/app_theme.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -28,8 +29,8 @@ class MyApp extends StatelessWidget {
       // themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       title: 'MotoRent',
-
-      home: HomePage(),
+      onGenerateRoute: AppRouter.generateRoute,
+      initialRoute: AppRouter.splash,
     );
   }
 }
