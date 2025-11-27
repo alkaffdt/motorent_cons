@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:motorent_cons/features/auth/presentation/screens/login_page.dart';
 import 'package:motorent_cons/features/home/presentation/screens/home_page.dart';
 import 'package:motorent_cons/themes/app_theme.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

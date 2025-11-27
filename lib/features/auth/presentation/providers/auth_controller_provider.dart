@@ -2,41 +2,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:motorent_cons/features/auth/domain/repositories/auth_repository.dart';
 
 class AuthController extends StateNotifier<AsyncValue<bool>> {
-  final AuthRepository repository;
+  final AuthRepository repo;
 
-  AuthController(this.repository) : super(const AsyncValue.loading()) {
-    _listenAuthState();
-  }
+  AuthController(this.repo) : super(const AsyncValue.data(false));
 
-  void _listenAuthState() {
-    repository.authStateChanges().listen((loggedIn) {
-      state = AsyncValue.data(loggedIn);
-    });
-  }
-
-  Future<void> signIn(String email, String password) async {
+  Future<AuthResult> loginOrSignup(String email, String password) async {
     state = const AsyncValue.loading();
-
-    try {
-      await repository.signInWithEmail(email, password);
-      state = const AsyncValue.data(true);
-    } catch (e, st) {
-      state = AsyncValue.error(e, st);
-    }
-  }
-
-  Future<void> signUp(String email, String password) async {
-    state = const AsyncValue.loading();
-
-    try {
-      await repository.signUpWithEmail(email, password);
-      state = const AsyncValue.data(true);
-    } catch (e, st) {
-      state = AsyncValue.error(e, st);
-    }
+    final result = await repo.loginOrSignup(email, password);
+    state = AsyncValue.data(result.success);
+    return result;
   }
 
   Future<void> signOut() async {
-    await repository.signOut();
+    await repo.signOut();
+    state = const AsyncValue.data(false);
   }
 }

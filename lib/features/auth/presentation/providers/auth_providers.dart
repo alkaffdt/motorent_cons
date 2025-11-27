@@ -4,6 +4,8 @@ import 'package:motorent_cons/features/auth/domain/repositories/auth_repository.
 import 'package:motorent_cons/features/auth/presentation/providers/auth_controller_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+// PROVIDERS
+
 final supabaseClientProvider = Provider<SupabaseClient>((ref) {
   return Supabase.instance.client;
 });

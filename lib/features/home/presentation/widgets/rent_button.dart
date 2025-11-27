@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:motorent_cons/features/auth/presentation/widgets/login_dialog.dart';
+import 'package:motorent_cons/features/auth/presentation/providers/auth_providers.dart';
 
 class PurchaseButton extends ConsumerWidget {
   final bool isVisible;
@@ -25,7 +27,14 @@ class PurchaseButton extends ConsumerWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  //
+                  final loggedIn =
+                      ref.read(authControllerProvider).value ?? false;
+
+                  if (!loggedIn) {
+                    Future.microtask(() {
+                      LoginDialog.show(context);
+                    });
+                  }
                 },
                 child: const Text("Let's rent"),
               ),

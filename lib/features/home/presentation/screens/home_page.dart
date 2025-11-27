@@ -15,6 +15,7 @@ class HomePage extends ConsumerWidget {
     final anySelected = ref.watch(selectedRentalDetailProvider) != null;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           Center(

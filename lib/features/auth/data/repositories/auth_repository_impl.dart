@@ -8,23 +8,12 @@ class SupabaseAuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<void> signInWithEmail(String email, String password) async {
-    final response = await client.auth.signInWithPassword(
-      email: email,
-      password: password,
-    );
-
-    if (response.session == null) {
-      throw Exception('Failed to sign in');
-    }
+    await client.auth.signInWithPassword(email: email, password: password);
   }
 
   @override
   Future<void> signUpWithEmail(String email, String password) async {
-    final response = await client.auth.signUp(email: email, password: password);
-
-    if (response.user == null) {
-      throw Exception('Failed to sign up');
-    }
+    await client.auth.signUp(email: email, password: password);
   }
 
   @override
@@ -34,14 +23,48 @@ class SupabaseAuthRepositoryImpl implements AuthRepository {
 
   @override
   Stream<bool> authStateChanges() {
-    return client.auth.onAuthStateChange.map((event) {
-      final session = event.session;
-      return session != null;
-    });
+    return client.auth.onAuthStateChange.map(
+      (event) => client.auth.currentUser != null,
+    );
   }
 
   @override
   bool isLoggedIn() {
-    return client.auth.currentSession != null;
+    return client.auth.currentUser != null;
+  }
+
+  @override
+  Future<AuthResult> loginOrSignup(String email, String password) async {
+    try {
+      await signInWithEmail(email, password);
+
+      return AuthResult(
+        success: true,
+        isNewUser: false,
+        message: "Login successful",
+      );
+    } on AuthException catch (e) {
+      // User not found → auto signup
+      if (e.message.contains("Invalid login credentials")) {
+        try {
+          await signUpWithEmail(email, password);
+
+          return AuthResult(
+            success: true,
+            isNewUser: true,
+            message:
+                "Account created. Please check your email to verify your account.",
+          );
+        } catch (e) {
+          return AuthResult(
+            success: false,
+            isNewUser: true,
+            message: e.toString(),
+          );
+        }
+      }
+
+      return AuthResult(success: false, isNewUser: false, message: e.message);
+    }
   }
 }
