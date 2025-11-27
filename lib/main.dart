@@ -12,6 +12,12 @@ void main() async {
     url: 'https://qsevwqwviroarteoyaxi.supabase.co',
     anonKey:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFzZXZ3cXd2aXJvYXJ0ZW95YXhpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM4ODcwNjAsImV4cCI6MjA3OTQ2MzA2MH0.aJKHy16yHUBiB0m6wnFX_9JvvTDIvdhRJuNjrbnEpF0',
+    authOptions: FlutterAuthClientOptions(
+      authFlowType: AuthFlowType.pkce,
+      localStorage: SharedPreferencesLocalStorage(
+        persistSessionKey: 'persist_session',
+      ),
+    ),
   );
 
   runApp(const ProviderScope(child: MyApp()));

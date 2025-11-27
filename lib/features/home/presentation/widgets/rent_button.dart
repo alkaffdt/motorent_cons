@@ -27,13 +27,15 @@ class PurchaseButton extends ConsumerWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  final loggedIn =
-                      ref.read(authControllerProvider).value ?? false;
+                  final loggedIn = ref
+                      .read(authRepositoryProvider)
+                      .isLoggedIn();
 
                   if (!loggedIn) {
-                    Future.microtask(() {
-                      LoginDialog.show(context);
-                    });
+                    LoginDialog.show(context);
+                    // Future.microtask(() {
+
+                    // });
                   }
                 },
                 child: const Text("Let's rent"),
