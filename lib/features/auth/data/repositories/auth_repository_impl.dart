@@ -1,25 +1,47 @@
-import 'package:motorent_cons/features/auth/data/datasources/remote/auth_remote_datasource.dart';
-import 'package:motorent_cons/features/auth/domain/entities/user.dart';
 import 'package:motorent_cons/features/auth/domain/repositories/auth_repository.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-class AuthRepositoryImpl implements AuthRepository {
-  final AuthRemoteDataSource remoteDataSource;
+class SupabaseAuthRepositoryImpl implements AuthRepository {
+  final SupabaseClient client;
 
-  AuthRepositoryImpl({required this.remoteDataSource});
+  SupabaseAuthRepositoryImpl(this.client);
 
   @override
-  Future<User> login(String email, String password) async {
-    final userMap = await remoteDataSource.login(email, password);
-    return User(
-      id: userMap['id'],
-      name: userMap['name'],
-      email: userMap['email'],
+  Future<void> signInWithEmail(String email, String password) async {
+    final response = await client.auth.signInWithPassword(
+      email: email,
+      password: password,
     );
+
+    if (response.session == null) {
+      throw Exception('Failed to sign in');
+    }
   }
 
   @override
-  Future<void> logout() async {
-    // Simulate network request
-    await Future.delayed(const Duration(seconds: 1));
+  Future<void> signUpWithEmail(String email, String password) async {
+    final response = await client.auth.signUp(email: email, password: password);
+
+    if (response.user == null) {
+      throw Exception('Failed to sign up');
+    }
+  }
+
+  @override
+  Future<void> signOut() async {
+    await client.auth.signOut();
+  }
+
+  @override
+  Stream<bool> authStateChanges() {
+    return client.auth.onAuthStateChange.map((event) {
+      final session = event.session;
+      return session != null;
+    });
+  }
+
+  @override
+  bool isLoggedIn() {
+    return client.auth.currentSession != null;
   }
 }

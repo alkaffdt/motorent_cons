@@ -3,13 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PurchaseButton extends ConsumerWidget {
   final bool isVisible;
-  final VoidCallback onPressed;
 
-  const PurchaseButton({
-    super.key,
-    required this.isVisible,
-    required this.onPressed,
-  });
+  const PurchaseButton({super.key, required this.isVisible});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,7 +24,9 @@ class PurchaseButton extends ConsumerWidget {
               height: 48,
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: onPressed,
+                onPressed: () {
+                  //
+                },
                 child: const Text("Let's rent"),
               ),
             ),

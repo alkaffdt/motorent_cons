@@ -28,7 +28,7 @@ class HomePage extends ConsumerWidget {
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: PurchaseButton(isVisible: anySelected, onPressed: () {}),
+            child: PurchaseButton(isVisible: anySelected),
           ),
         ],
       ),

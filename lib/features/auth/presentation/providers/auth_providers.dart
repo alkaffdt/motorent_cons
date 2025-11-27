@@ -1,19 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:motorent_cons/features/auth/data/datasources/remote/auth_remote_datasource.dart';
 import 'package:motorent_cons/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:motorent_cons/features/auth/domain/repositories/auth_repository.dart';
-import 'package:motorent_cons/features/auth/domain/usecases/login.dart';
+import 'package:motorent_cons/features/auth/presentation/providers/auth_controller_provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>((ref) {
-  return AuthRemoteDataSourceImpl();
+final supabaseClientProvider = Provider<SupabaseClient>((ref) {
+  return Supabase.instance.client;
 });
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  final remoteDataSource = ref.watch(authRemoteDataSourceProvider);
-  return AuthRepositoryImpl(remoteDataSource: remoteDataSource);
+  final client = ref.watch(supabaseClientProvider);
+  return SupabaseAuthRepositoryImpl(client);
 });
 
-final loginUseCaseProvider = Provider<Login>((ref) {
-  final repository = ref.watch(authRepositoryProvider);
-  return Login(repository);
-});
+final authControllerProvider =
+    StateNotifierProvider<AuthController, AsyncValue<bool>>((ref) {
+      final repo = ref.watch(authRepositoryProvider);
+      return AuthController(repo);
+    });

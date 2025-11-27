@@ -1,6 +1,7 @@
-import 'package:motorent_cons/features/auth/domain/entities/user.dart';
-
 abstract class AuthRepository {
-  Future<User> login(String email, String password);
-  Future<void> logout();
+  Future<void> signInWithEmail(String email, String password);
+  Future<void> signUpWithEmail(String email, String password);
+  Future<void> signOut();
+  Stream<bool> authStateChanges();
+  bool isLoggedIn();
 }

@@ -4,7 +4,7 @@ import 'package:motorent_cons/features/home/domain/entities/vehicle_model.dart';
 import 'package:supabase/supabase.dart';
 
 final vehiclesRepoProvider = Provider<VehiclesRepo>((ref) {
-  final supabaseClient = ref.watch(supabaseProvider);
+  final supabaseClient = ref.watch(supabaseClientProvider);
   return VehiclesRepoImpl(supabaseClient: supabaseClient);
 });
 
