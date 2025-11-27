@@ -33,9 +33,6 @@ class PurchaseButton extends ConsumerWidget {
 
                   if (!loggedIn) {
                     LoginDialog.show(context);
-                    // Future.microtask(() {
-
-                    // });
                   }
                 },
                 child: const Text("Let's rent"),
