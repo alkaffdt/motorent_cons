@@ -12,10 +12,10 @@ class HomeScreenScrollController extends Notifier<ScrollController> {
     return ScrollController();
   }
 
-  void scrollDown({int pixels = 100}) {
+  void scrollDown({int pixels = 75}) {
     state.animateTo(
       state.position.pixels + pixels,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 800),
       curve: Curves.linear,
     );
   }

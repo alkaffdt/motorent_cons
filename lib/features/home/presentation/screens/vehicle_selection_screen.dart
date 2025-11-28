@@ -129,7 +129,7 @@ class _BikeSelectionBodyState extends ConsumerState<_BikeSelectionBody> {
         ),
         16.toHeightGap(),
         PricesWidget(widget.vehicles[_index]),
-        200.toHeightGap(),
+        100.toHeightGap(),
       ],
     );
   }
