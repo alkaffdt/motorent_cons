@@ -5,6 +5,7 @@ import 'package:motorent_cons/common/widgets/date_time_picker.dart';
 import 'package:motorent_cons/extensions/int_extensions.dart';
 import 'package:motorent_cons/extensions/navigation_extension.dart';
 import 'package:motorent_cons/features/auth/domain/models/submission_status_state.dart';
+import 'package:motorent_cons/features/auth/presentation/providers/auth_providers.dart';
 import 'package:motorent_cons/features/home/presentation/providers/selected_vehicle_provider.dart';
 import 'package:motorent_cons/features/rent_form/presentation/providers/rent_form_controller.dart';
 import 'package:motorent_cons/features/rent_form/presentation/widgets/confirm_rent_button.dart';
@@ -13,6 +14,7 @@ class RentFormPage extends ConsumerWidget {
   RentFormPage({super.key});
 
   final ScrollController _scrollController = ScrollController();
+  TextEditingController nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,6 +40,12 @@ class RentFormPage extends ConsumerWidget {
           message: next.submissionErrorMessage,
         );
       }
+    });
+
+    Future.microtask(() {
+      nameController.text =
+          ref.watch(authUserProfileProvider).userMetadata?['display_name'] ??
+          '';
     });
 
     return Scaffold(
@@ -66,6 +74,15 @@ class RentFormPage extends ConsumerWidget {
                       _pickDateTime(context, formNotifier.setStartDateTime),
                 ),
                 16.toHeightGap(),
+
+                TextField(
+                  enabled: false,
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    labelText: "Name",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
 
                 // END DATE
                 if (formState.endDateTime != null)

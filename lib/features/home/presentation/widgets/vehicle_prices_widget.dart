@@ -7,6 +7,7 @@ import 'package:motorent_cons/extensions/string_extension.dart';
 import 'package:motorent_cons/extensions/text_style_extension.dart';
 import 'package:motorent_cons/features/home/domain/entities/rental_detail_model.dart';
 import 'package:motorent_cons/features/home/domain/entities/vehicle_model.dart';
+import 'package:motorent_cons/features/home/presentation/providers/home_page_scroll_controller.dart';
 import 'package:motorent_cons/features/home/presentation/providers/selected_rental_period_provider.dart';
 import 'package:motorent_cons/themes/app_colors.dart';
 import 'package:motorent_cons/utils/discount_calculator.dart';
@@ -63,6 +64,8 @@ class PricesWidget extends ConsumerWidget {
           onTap: () {
             ref.read(selectedRentalDetailProvider.notifier).state =
                 RentalDetail(durationInDays: durationInDays, price: price);
+
+            ref.read(homeScreenScrollControllerProvider.notifier).scrollDown();
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
