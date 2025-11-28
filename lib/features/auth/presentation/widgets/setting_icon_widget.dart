@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:motorent_cons/extensions/int_extensions.dart';
+import 'package:motorent_cons/extensions/navigation_extension.dart';
 import 'package:motorent_cons/extensions/text_style_extension.dart';
 import 'package:motorent_cons/features/auth/presentation/providers/auth_providers.dart';
+import 'package:motorent_cons/features/home/presentation/screens/transactions_history_page.dart';
 import 'package:motorent_cons/themes/app_colors.dart';
 
 class SettingIconWidget extends ConsumerWidget {
@@ -31,6 +33,13 @@ class SettingIconWidget extends ConsumerWidget {
                   enabled: false,
                   value: 1,
                   child: const Text('Profile'),
+                ),
+                PopupMenuItem(
+                  onTap: () {
+                    context.push(TransactionsHistoryPage());
+                  },
+                  value: 2,
+                  child: Text('Transactions'),
                 ),
                 PopupMenuItem(
                   onTap: () {

@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:motorent_cons/features/home/domain/entities/vehicle_model.dart';
+import 'package:motorent_cons/features/home/domain/models/vehicle_model.dart';
 import 'package:motorent_cons/features/home/domain/repositories/vehicles_repo.dart';
 
 final getAllVehiclesProvider = FutureProvider<List<Vehicle>>((ref) {

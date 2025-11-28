@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:motorent_cons/common/widgets/app_shimmer.dart';
 import 'package:motorent_cons/common/widgets/inapp_webview_page.dart';
 import 'package:motorent_cons/extensions/navigation_extension.dart';
-import 'package:motorent_cons/features/home/domain/entities/banner_model.dart';
+import 'package:motorent_cons/features/home/domain/models/banner_model.dart';
 import 'package:motorent_cons/features/home/presentation/providers/get_all_banners.dart';
 
 const _contentHeight = 200.0;

@@ -1,16 +1,18 @@
 import 'package:dartz/dartz.dart';
+import 'package:motorent_cons/features/home/domain/models/vehicle_model.dart';
 
-class RentalTransactionDTO {
-  final StringMonoid? id;
+class RentalTransactionHistory {
+  final int? id;
   final DateTime? createdAt;
   final String? userId; // nullable di Supabase
   final DateTime? startDate;
   final DateTime? endDate;
-  final String? durationInDays;
+  final int? durationInDays;
   final double? totalPrice;
   final String? addressDetail;
+  final Vehicle? vehicle;
 
-  const RentalTransactionDTO({
+  const RentalTransactionHistory({
     this.id,
     this.createdAt,
     this.userId,
@@ -19,11 +21,12 @@ class RentalTransactionDTO {
     this.durationInDays,
     this.totalPrice,
     this.addressDetail,
+    this.vehicle,
   });
 
   // ---- FROM JSON ----
-  factory RentalTransactionDTO.fromJson(Map<String, dynamic> json) {
-    return RentalTransactionDTO(
+  factory RentalTransactionHistory.fromJson(Map<String, dynamic> json) {
+    return RentalTransactionHistory(
       id: json['id'],
       createdAt: DateTime.parse(json['created_at']),
       userId: json['user_id'] as String?,
@@ -33,35 +36,24 @@ class RentalTransactionDTO {
       endDate: json['end_date'] != null
           ? DateTime.parse(json['end_date'])
           : null,
-      durationInDays: json['duration_in_days'] as String?,
+      durationInDays: json['duration_in_days'],
       totalPrice: (json['total_price'] as num?)?.toDouble(),
       addressDetail:
           json['address_detail'] as String?, // typo di DB tetap dipakai
+      vehicle: Vehicle.fromJSON(json['vehicles']),
     );
   }
 
-  // ---- TO JSON ----
-  Map<String, dynamic> toJson() {
-    return {
-      'user_id': userId,
-      'start_date': startDate?.toIso8601String(),
-      'end_date': endDate?.toIso8601String(),
-      'duration_in_days': durationInDays,
-      'total_price': totalPrice,
-      'address_detail': addressDetail, // sesuai DB
-    };
-  }
-
   // ---- COPYWITH ----
-  RentalTransactionDTO copyWith({
+  RentalTransactionHistory copyWith({
     String? userId,
     DateTime? startDate,
     DateTime? endDate,
-    String? durationInDays,
+    int? durationInDays,
     double? totalPrice,
     String? addressDetail,
   }) {
-    return RentalTransactionDTO(
+    return RentalTransactionHistory(
       userId: userId ?? this.userId,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,

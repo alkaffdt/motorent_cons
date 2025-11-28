@@ -9,7 +9,7 @@ class RentFormRepositoryImpl implements RentFormRepository {
   RentFormRepositoryImpl(this.client);
 
   @override
-  Future<Either<Exception, Unit>> submitRent(RentalTransactionData data) async {
+  Future<Either<Exception, Unit>> submitRent(RentalTransactionDTO data) async {
     try {
       final response = await client
           .from("rental_transactions")

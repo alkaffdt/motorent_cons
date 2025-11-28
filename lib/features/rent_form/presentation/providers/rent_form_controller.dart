@@ -3,8 +3,8 @@ import 'package:motorent_cons/consts/rent_period_types.dart';
 import 'package:motorent_cons/extensions/string_extension.dart';
 import 'package:motorent_cons/features/auth/domain/models/submission_status_state.dart';
 import 'package:motorent_cons/features/auth/presentation/providers/auth_providers.dart';
-import 'package:motorent_cons/features/home/domain/entities/rental_detail_model.dart';
-import 'package:motorent_cons/features/home/domain/entities/vehicle_model.dart';
+import 'package:motorent_cons/features/home/domain/models/rental_detail_model.dart';
+import 'package:motorent_cons/features/home/domain/models/vehicle_model.dart';
 import 'package:motorent_cons/features/home/presentation/providers/selected_rental_period_provider.dart';
 import 'package:motorent_cons/features/rent_form/data/models/rental_transaction_dto.dart';
 import 'package:motorent_cons/features/rent_form/domain/models/rent_form_state.dart';
@@ -53,7 +53,7 @@ class RentFormNotifier extends StateNotifier<RentFormState> {
     state = state.copyWith(submissionStatus: SubmissionStatus.loading);
 
     try {
-      final data = RentalTransactionData(
+      final data = RentalTransactionDTO(
         userId: userId,
         startDate: state.startDateTime,
         endDate: state.endDateTime,

@@ -1,7 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:motorent_cons/core/network/supabase/supabase_provider.dart';
-import 'package:motorent_cons/features/home/domain/entities/banner_model.dart';
-import 'package:motorent_cons/features/home/domain/entities/vehicle_model.dart';
+import 'package:motorent_cons/features/home/domain/models/banner_model.dart';
+import 'package:motorent_cons/features/home/domain/models/transaction_history_model.dart';
+import 'package:motorent_cons/features/home/domain/models/vehicle_model.dart';
 import 'package:supabase/supabase.dart';
 
 final vehiclesRepoProvider = Provider<VehiclesRepo>((ref) {
@@ -12,6 +13,7 @@ final vehiclesRepoProvider = Provider<VehiclesRepo>((ref) {
 abstract class VehiclesRepo {
   Future<List<Vehicle>> getVehicles();
   Future<List<PromotionBanner>> getBanners();
+  Future<List<RentalTransactionHistory>> getTransactionHistories();
 }
 
 class VehiclesRepoImpl implements VehiclesRepo {
@@ -34,6 +36,19 @@ class VehiclesRepoImpl implements VehiclesRepo {
     try {
       final response = await supabaseClient.from('vehicles').select('*');
       return response.map((e) => Vehicle.fromJSON(e)).toList();
+    } catch (e) {
+      throw Exception("Failed to fetch vehicles: $e");
+    }
+  }
+
+  @override
+  Future<List<RentalTransactionHistory>> getTransactionHistories() async {
+    try {
+      final response = await supabaseClient
+          .from('rental_transactions')
+          .select('*, vehicles!vehicle_id(*)')
+          .order('created_at', ascending: false);
+      return response.map((e) => RentalTransactionHistory.fromJson(e)).toList();
     } catch (e) {
       throw Exception("Failed to fetch vehicles: $e");
     }

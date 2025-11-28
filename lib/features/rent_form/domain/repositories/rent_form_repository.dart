@@ -9,5 +9,5 @@ final rentFormRepositoryProvider = Provider<RentFormRepository>((ref) {
 });
 
 abstract class RentFormRepository {
-  Future<Either<Exception, Unit>> submitRent(RentalTransactionData data);
+  Future<Either<Exception, Unit>> submitRent(RentalTransactionDTO data);
 }

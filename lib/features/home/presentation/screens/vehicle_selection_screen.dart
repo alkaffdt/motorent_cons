@@ -8,7 +8,7 @@ import 'package:motorent_cons/extensions/double_extension.dart';
 import 'package:motorent_cons/extensions/int_extensions.dart';
 import 'package:motorent_cons/extensions/navigation_extension.dart';
 import 'package:motorent_cons/extensions/text_style_extension.dart';
-import 'package:motorent_cons/features/home/domain/entities/vehicle_model.dart';
+import 'package:motorent_cons/features/home/domain/models/vehicle_model.dart';
 import 'package:motorent_cons/features/home/presentation/providers/get_all_vehicles_provider.dart';
 import 'package:motorent_cons/features/home/presentation/providers/selected_vehicle_provider.dart';
 import 'package:motorent_cons/features/home/presentation/widgets/vehicle_prices_widget.dart';

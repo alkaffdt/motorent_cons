@@ -6,6 +6,7 @@ import 'package:motorent_cons/extensions/int_extensions.dart';
 import 'package:motorent_cons/extensions/navigation_extension.dart';
 import 'package:motorent_cons/features/auth/domain/models/submission_status_state.dart';
 import 'package:motorent_cons/features/auth/presentation/providers/auth_providers.dart';
+import 'package:motorent_cons/features/home/presentation/providers/get_all_transactions_provider.dart';
 import 'package:motorent_cons/features/home/presentation/providers/selected_vehicle_provider.dart';
 import 'package:motorent_cons/features/rent_form/presentation/providers/rent_form_controller.dart';
 import 'package:motorent_cons/features/rent_form/presentation/widgets/confirm_rent_button.dart';
@@ -29,6 +30,7 @@ class RentFormPage extends ConsumerWidget {
       } else if (next.submissionStatus == SubmissionStatus.success) {
         context.pop(); // close loading dialog
         AppDialog.showSuccessDialog(context, message: 'Rent Form Submitted');
+        ref.watch(getAllTransactionsProvider);
 
         Future.delayed(const Duration(seconds: 2), () {
           context.pop();
