@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:motorent_cons/consts/app_assets_const.dart';
 import 'package:motorent_cons/core/app_router.dart';
+import 'package:motorent_cons/extensions/int_extensions.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -92,7 +93,18 @@ class _SplashScreenState extends State<SplashScreen>
               ),
             ),
 
-            const SizedBox(height: 20),
+            20.toHeightGap(),
+
+            Text(
+              'MotoRENT',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            20.toHeightGap(),
 
             // TAGLINE ANIMATION
             FadeTransition(

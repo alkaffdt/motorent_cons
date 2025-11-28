@@ -6,6 +6,7 @@ import 'package:motorent_cons/features/auth/presentation/providers/auth_provider
 import 'package:motorent_cons/features/home/domain/models/rental_detail_model.dart';
 import 'package:motorent_cons/features/home/domain/models/vehicle_model.dart';
 import 'package:motorent_cons/features/home/presentation/providers/selected_rental_period_provider.dart';
+import 'package:motorent_cons/features/home/presentation/providers/selected_vehicle_provider.dart';
 import 'package:motorent_cons/features/rent_form/data/models/rental_transaction_dto.dart';
 import 'package:motorent_cons/features/rent_form/domain/models/rent_form_state.dart';
 import 'package:motorent_cons/features/rent_form/domain/repositories/rent_form_repository.dart';
@@ -18,6 +19,7 @@ final rentFormProvider = StateNotifierProvider<RentFormNotifier, RentFormState>(
       rentalDetail: ref.watch(selectedRentalDetailProvider)!,
       repository: ref.read(rentFormRepositoryProvider),
       userId: user.id,
+      vehicleId: ref.watch(selectedVehicleProvider)!.id,
     );
   },
 );
@@ -27,11 +29,13 @@ class RentFormNotifier extends StateNotifier<RentFormState> {
     required this.rentalDetail,
     required this.repository,
     required this.userId,
+    required this.vehicleId,
   }) : super(RentFormState());
 
   final RentFormRepository repository;
   final RentalDetail rentalDetail;
   final String userId;
+  final int vehicleId;
 
   void setAddress(String value) {
     state = state.copyWith(address: value);
@@ -55,6 +59,7 @@ class RentFormNotifier extends StateNotifier<RentFormState> {
     try {
       final data = RentalTransactionDTO(
         userId: userId,
+        vehicleId: vehicleId,
         startDate: state.startDateTime,
         endDate: state.endDateTime,
         durationInDays: rentalDetail.durationInDays.toString(),

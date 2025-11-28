@@ -77,6 +77,16 @@ class RentFormPage extends ConsumerWidget {
                 ),
                 16.toHeightGap(),
 
+                // END DATE
+                if (formState.endDateTime != null)
+                  MotorentDateTimePicker(
+                    label: "End Date & Time",
+                    value: formState.endDateTime,
+                    error: null,
+                    enabled: false,
+                  ),
+                24.toHeightGap(),
+
                 TextField(
                   enabled: false,
                   controller: nameController,
@@ -86,14 +96,6 @@ class RentFormPage extends ConsumerWidget {
                   ),
                 ),
 
-                // END DATE
-                if (formState.endDateTime != null)
-                  MotorentDateTimePicker(
-                    label: "End Date & Time",
-                    value: formState.endDateTime,
-                    error: null,
-                    enabled: false,
-                  ),
                 24.toHeightGap(),
 
                 // ADDRESS

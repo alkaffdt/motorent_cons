@@ -13,7 +13,7 @@ final vehiclesRepoProvider = Provider<VehiclesRepo>((ref) {
 abstract class VehiclesRepo {
   Future<List<Vehicle>> getVehicles();
   Future<List<PromotionBanner>> getBanners();
-  Future<List<RentalTransactionHistory>> getTransactionHistories();
+  Future<List<RentalTransactionHistory>> getTransactionHistories(String userId);
 }
 
 class VehiclesRepoImpl implements VehiclesRepo {
@@ -42,11 +42,14 @@ class VehiclesRepoImpl implements VehiclesRepo {
   }
 
   @override
-  Future<List<RentalTransactionHistory>> getTransactionHistories() async {
+  Future<List<RentalTransactionHistory>> getTransactionHistories(
+    String userId,
+  ) async {
     try {
       final response = await supabaseClient
           .from('rental_transactions')
           .select('*, vehicles!vehicle_id(*)')
+          .eq('user_id', userId)
           .order('created_at', ascending: false);
       return response.map((e) => RentalTransactionHistory.fromJson(e)).toList();
     } catch (e) {

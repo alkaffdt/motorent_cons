@@ -13,6 +13,9 @@ class HomeScreenScrollController extends Notifier<ScrollController> {
   }
 
   void scrollDown({int pixels = 75}) {
+    // prevent scrolling if it's close to the bottom
+    if (state.position.pixels >= state.position.maxScrollExtent - 50) return;
+
     state.animateTo(
       state.position.pixels + pixels,
       duration: const Duration(milliseconds: 800),

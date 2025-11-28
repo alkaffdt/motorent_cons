@@ -9,6 +9,7 @@ class RentalTransactionDTO {
   final String? durationInDays;
   final double? totalPrice;
   final String? addressDetail;
+  final int? vehicleId;
 
   const RentalTransactionDTO({
     this.id,
@@ -19,6 +20,7 @@ class RentalTransactionDTO {
     this.durationInDays,
     this.totalPrice,
     this.addressDetail,
+    this.vehicleId,
   });
 
   // ---- FROM JSON ----
@@ -37,6 +39,7 @@ class RentalTransactionDTO {
       totalPrice: (json['total_price'] as num?)?.toDouble(),
       addressDetail:
           json['address_detail'] as String?, // typo di DB tetap dipakai
+      vehicleId: json['vehicle_id'] as int?,
     );
   }
 
@@ -49,6 +52,7 @@ class RentalTransactionDTO {
       'duration_in_days': durationInDays,
       'total_price': totalPrice,
       'address_detail': addressDetail, // sesuai DB
+      'vehicle_id': vehicleId,
     };
   }
 
@@ -60,6 +64,7 @@ class RentalTransactionDTO {
     String? durationInDays,
     double? totalPrice,
     String? addressDetail,
+    int? vehicleId,
   }) {
     return RentalTransactionDTO(
       userId: userId ?? this.userId,
