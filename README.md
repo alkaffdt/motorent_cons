@@ -33,7 +33,7 @@
 #### Flutter 3.32.8
 #### Supabase (Backend & Auth)
 #### Riverpod <br></br>
-Riverpod was the clear choice for us because it perfectly supports dynamic growth. It gives us minimal boilerplate and maximum flexibility, letting us ship fast now while staying confident the architecture won’t collapse when we scale the team, features, or platforms later.
+Riverpod was the clear choice for me because it perfectly supports dynamic growth. It gives me minimal boilerplate and maximum flexibility, letting me ship fast now while staying confident the architecture won’t collapse when we scale the team, features, or platforms later.
 
 <br></br>
 ## Room for improvements
