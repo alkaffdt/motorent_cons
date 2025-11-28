@@ -2,10 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:motorent_cons/common/widgets/app_shimmer.dart';
 import 'package:motorent_cons/common/widgets/inapp_webview_page.dart';
 import 'package:motorent_cons/extensions/navigation_extension.dart';
 import 'package:motorent_cons/features/home/domain/entities/banner_model.dart';
 import 'package:motorent_cons/features/home/presentation/providers/get_all_banners.dart';
+
+const _contentHeight = 200.0;
 
 class PromotionBannersScreen extends ConsumerWidget {
   const PromotionBannersScreen({super.key});
@@ -16,7 +19,12 @@ class PromotionBannersScreen extends ConsumerWidget {
 
     return state.when(
       data: (data) => _BannersBody(data),
-      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+      loading: () => const Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: AppShimmer(height: _contentHeight, width: double.infinity),
+        ),
+      ),
       error: (error, stackTrace) => Center(child: Text(error.toString())),
     );
   }
@@ -68,7 +76,7 @@ class _BannersBodyState extends ConsumerState<_BannersBody> {
   @override
   Widget build(BuildContext context) {
     if (widget.banners.isEmpty) {
-      return const SizedBox(height: 200);
+      return const SizedBox.shrink();
     }
     if (widget.banners.length == 1) {
       return InkWell(
@@ -77,7 +85,7 @@ class _BannersBodyState extends ConsumerState<_BannersBody> {
           borderRadius: BorderRadius.circular(12),
           child: Image.network(
             widget.banners[0].imageUrl!,
-            height: 200,
+            height: _contentHeight,
             width: double.infinity,
             fit: BoxFit.cover,
           ),
@@ -88,7 +96,7 @@ class _BannersBodyState extends ConsumerState<_BannersBody> {
     return InkWell(
       onTap: () => _onTapBanner(widget.banners[_currentPage].url!),
       child: SizedBox(
-        height: 200,
+        height: _contentHeight,
         child: Stack(
           children: [
             PageView.builder(

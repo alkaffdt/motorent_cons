@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:motorent_cons/common/widgets/app_shimmer.dart';
 import 'package:motorent_cons/common/widgets/inapp_webview_page.dart';
 import 'package:motorent_cons/extensions/context_extension.dart';
 import 'package:motorent_cons/extensions/double_extension.dart';
@@ -13,6 +14,8 @@ import 'package:motorent_cons/features/home/presentation/providers/selected_vehi
 import 'package:motorent_cons/features/home/presentation/widgets/vehicle_prices_widget.dart';
 import 'package:motorent_cons/themes/app_colors.dart';
 
+const _contentHeight = 324.0;
+
 class BikeSelectionScreen extends ConsumerWidget {
   const BikeSelectionScreen({super.key});
 
@@ -22,7 +25,10 @@ class BikeSelectionScreen extends ConsumerWidget {
 
     return state.when(
       data: (data) => _BikeSelectionBody(data),
-      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+      loading: () => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: const AppShimmer(height: _contentHeight, width: double.infinity),
+      ),
       error: (error, stackTrace) => Center(child: Text(error.toString())),
     );
   }
