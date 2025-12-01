@@ -19,7 +19,7 @@
 
 
 ### Web
-[Demo : http://el-motorent.netlify.app/](http://motorent.netlify.app/)
+[Demo : http://el-motorent.netlify.app/](http://el-motorent.netlify.app/)
 <br></br>
 <img width="333" height="649" alt="image" src="https://github.com/user-attachments/assets/16660dd0-f833-4199-a835-84c0f088f2b4" />
 
